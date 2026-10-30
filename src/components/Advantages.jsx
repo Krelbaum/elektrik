@@ -1,91 +1,150 @@
-import { motion } from 'framer-motion';
-import {
-  Target,
-  Award,
-  CalendarCheck,
-  ShieldCheck,
-  Users,
-  Truck,
-} from 'lucide-react';
-import GlassCard from './ui/GlassCard';
-import AnimatedCounter from './ui/AnimatedCounter';
-import SectionTitle from './ui/SectionTitle';
-import ScrollReveal from './ui/ScrollReveal';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { Target, Award, CalendarCheck, ShieldCheck, Users, Truck } from 'lucide-react';
 
-const advantages = [
-  {
-    icon: Target,
-    title: 'Индивидуальный подход',
-    description: 'Каждый щит проектируется под конкретный объект с учётом всех требований и особенностей.',
-  },
-  {
-    icon: Award,
-    title: 'Качественные комплектующие',
-    description: 'Используем продукцию ABB, Schneider Electric, IEK, EKF — проверенных производителей.',
-  },
-  {
-    icon: CalendarCheck,
-    title: 'Соблюдение сроков',
-    description: 'Гарантируем выполнение заказов в оговоренные сроки. ценим ваше время.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Гарантия 3 года',
-    description: 'Полная гарантия на сборку и комплектующие. Оперативное устранение неисправностей.',
-  },
-  {
-    icon: Users,
-    title: 'Сертифицированные специалисты',
-    description: 'Все работы выполняются сертифицированными инженерами по нормативам ПУЭ и ГОСТ.',
-  },
-  {
-    icon: Truck,
-    title: 'Доставка по всей России',
-    description: 'Отправляем готовые щиты в любой регион России надёжными транспортными компаниями.',
-  },
-];
+function StatItem({ value, suffix, label, delay }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
 
-const stats = [
-  { value: 500, suffix: '+', label: 'щитов собрано' },
-  { value: 10, suffix: '', label: 'лет на рынке' },
-  { value: 98, suffix: '%', label: 'довольных клиентов' },
-  { value: 24, suffix: '/7', label: 'поддержка' },
-];
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const totalSteps = 120;
+    const increment = value / totalSteps;
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, value]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+      transition={{ duration: 0.5, delay }}
+      className="text-center"
+    >
+      <div className="text-4xl sm:text-5xl font-black text-gradient mb-2">
+        {count}{suffix}
+      </div>
+      <div className="text-sm text-white/30">{label}</div>
+    </motion.div>
+  );
+}
+
+function AdvantageCard({ icon: Icon, title, description, delay }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -30 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      className="flex items-start gap-4 group"
+    >
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/15 to-purple-500/15 flex items-center justify-center flex-shrink-0 group-hover:from-cyan-500/25 group-hover:to-purple-500/25 transition-all duration-500">
+        <Icon size={22} className="text-cyan-400" />
+      </div>
+      <div>
+        <h3 className="font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors">
+          {title}
+        </h3>
+        <p className="text-white/35 text-sm leading-relaxed">{description}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 function Advantages() {
+  const advantages = [
+    {
+      icon: Target,
+      title: 'Индивидуальный подход',
+      description: 'Каждый щит проектируется под конкретный объект с учётом всех требований.',
+    },
+    {
+      icon: Award,
+      title: 'Качественные комплектующие',
+      description: 'ABB, Schneider Electric, IEK, EKF — проверенные производители.',
+    },
+    {
+      icon: CalendarCheck,
+      title: 'Соблюдение сроков',
+      description: 'Гарантируем выполнение заказов в оговоренные сроки.',
+    },
+    {
+      icon: ShieldCheck,
+      title: 'Гарантия 3 года',
+      description: 'Полная гарантия на сборку и комплектующие.',
+    },
+    {
+      icon: Users,
+      title: 'Сертифицированные специалисты',
+      description: 'Работы по нормативам ПУЭ и ГОСТ.',
+    },
+    {
+      icon: Truck,
+      title: 'Доставка по всей России',
+      description: 'Отправляем в любой регион надёжными ТК.',
+    },
+  ];
+
   return (
-    <section id="advantages" className="relative py-24 md:py-32 bg-background-primary bg-grid">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionTitle
-          title="Почему выбирают нас"
-          subtitle="Более 10 лет создаём надёжное электрощитовое оборудование для объектов любой сложности"
-        />
+    <section id="advantages" className="relative py-32 md:py-44 bg-[#030712] bg-grid-subtle">
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px]" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-          {advantages.map((adv, i) => (
-            <ScrollReveal key={i} delay={i * 0.1}>
-              <GlassCard className="h-full hover:border-electric/30 transition-colors group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-electric/10 flex items-center justify-center mb-4 group-hover:bg-gradient-electric/20 transition-colors">
-                  <adv.icon size={24} className="text-electric" />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-white">{adv.title}</h3>
-                <p className="text-text-secondary text-sm leading-relaxed">{adv.description}</p>
-              </GlassCard>
-            </ScrollReveal>
-          ))}
-        </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Left: advantages list */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="text-cyan-400 text-sm font-medium uppercase tracking-widest mb-4 block">
+                Преимущества
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-12">
+                Почему выбирают <span className="text-gradient">нас</span>
+              </h2>
+            </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
-          {stats.map((stat, i) => (
-            <ScrollReveal key={i} delay={i * 0.1}>
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-black text-gradient mb-2">
-                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-sm text-text-secondary">{stat.label}</div>
+            <div className="space-y-6">
+              {advantages.map((adv, i) => (
+                <AdvantageCard
+                  key={i}
+                  icon={adv.icon}
+                  title={adv.title}
+                  description={adv.description}
+                  delay={0.2 + i * 0.1}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right: stats */}
+          <div className="flex flex-col justify-center">
+            <div className="glass-strong rounded-[32px] p-12">
+              <div className="grid grid-cols-2 gap-10">
+                <StatItem value={500} suffix="+" label="щитов собрано" delay={0.3} />
+                <StatItem value={10} suffix="" label="лет на рынке" delay={0.4} />
+                <StatItem value={98} suffix="%" label="довольных клиентов" delay={0.5} />
+                <StatItem value={24} suffix="/7" label="поддержка" delay={0.6} />
               </div>
-            </ScrollReveal>
-          ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

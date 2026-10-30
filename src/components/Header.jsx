@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Phone } from 'lucide-react';
-import { Button, Drawer, Box, Typography } from '@mui/material';
+import { Menu, X, Zap } from 'lucide-react';
+import MagneticButton from './MagneticButton';
 
 const navLinks = [
   { label: 'Услуги', href: '#services' },
@@ -14,109 +14,130 @@ const navLinks = [
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(totalHeight > 0 ? window.scrollY / totalHeight : 0);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
+      {/* Scroll progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500"
+        style={{ width: `${scrollProgress * 100}%` }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      />
+
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'glass-strong py-3 shadow-lg shadow-electric/5' : 'py-5 bg-transparent'
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'py-3 glass-strong'
+            : 'py-5 bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2">
-            <span className="text-2xl">⚡</span>
-            <Typography variant="h6" className="font-bold">
-              Электрощиты <span className="text-gradient">НСК</span>
-            </Typography>
+          <a href="#" className="flex items-center gap-3 group">
+            <motion.div
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center"
+              whileHover={{ rotate: 10, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+            >
+              <Zap size={20} className="text-white" />
+            </motion.div>
+            <div>
+              <div className="font-bold text-lg leading-none">Электрощиты</div>
+              <div className="text-[10px] text-white/40 uppercase tracking-widest">НСК</div>
+            </div>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
+          <nav className="hidden md:flex items-center gap-1">
+            {navLinks.map((link, i) => (
+              <motion.a
                 key={link.href}
                 href={link.href}
-                className="text-text-secondary hover:text-electric transition-colors duration-200 text-sm font-medium"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.05 }}
+                className="relative px-4 py-2 text-sm text-white/60 hover:text-white transition-colors group"
               >
                 {link.label}
-              </a>
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-cyan-500 to-purple-500 group-hover:w-3/4 transition-all duration-300" />
+              </motion.a>
             ))}
-            <Button
-              variant="contained"
-              href="#order"
-              className="!bg-gradient-electric !text-background-deep hover:!opacity-90 shadow-electric"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Заказать расчёт
-            </Button>
           </nav>
 
+          <div className="hidden md:block">
+            <MagneticButton className="magnetic-btn magnetic-btn-primary text-sm px-6 py-3">
+              Заказать расчёт
+            </MagneticButton>
+          </div>
+
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-white p-2 interactive"
             onClick={() => setMobileOpen(true)}
           >
-            <Menu size={28} />
+            <Menu size={24} />
           </button>
         </div>
       </motion.header>
 
-      <Drawer
-        anchor="right"
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        PaperProps={{
-          className: '!bg-background-primary !w-72 !border-l border-white/10',
-        }}
-      >
-        <Box className="p-6">
-          <div className="flex items-center justify-between mb-8">
-            <span className="text-xl font-bold">Меню</span>
-            <button onClick={() => setMobileOpen(false)}>
-              <X size={24} className="text-text-secondary" />
-            </button>
-          </div>
-          <nav className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-text-secondary hover:text-electric transition-colors py-2 text-lg"
-              >
-                {link.label}
-              </a>
-            ))}
-            <Button
-              variant="contained"
-              href="#order"
-              className="!bg-gradient-electric !text-background-deep mt-4"
-              onClick={(e) => {
-                e.preventDefault();
-                setMobileOpen(false);
-                document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-[#030712]/90 backdrop-blur-xl"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 z-50 w-72 glass-strong p-8"
             >
-              Заказать расчёт
-            </Button>
-          </nav>
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <a href="tel:+73831234567" className="flex items-center gap-2 text-electric">
-              <Phone size={18} />
-              <span>+7 (383) 123-45-67</span>
-            </a>
-          </div>
-        </Box>
-      </Drawer>
+              <div className="flex items-center justify-between mb-12">
+                <span className="font-bold text-lg">Меню</span>
+                <button onClick={() => setMobileOpen(false)} className="interactive">
+                  <X size={24} className="text-white/60" />
+                </button>
+              </div>
+              <nav className="flex flex-col gap-6">
+                {navLinks.map((link, i) => (
+                  <motion.a
+                    key={link.href}
+                    href={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + i * 0.1 }}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-white/80 hover:text-cyan-400 transition-colors text-xl interactive"
+                  >
+                    {link.label}
+                  </motion.a>
+                ))}
+                <MagneticButton className="magnetic-btn magnetic-btn-primary w-full mt-4 text-sm">
+                  Заказать расчёт
+                </MagneticButton>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

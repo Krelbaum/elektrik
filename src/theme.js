@@ -9,25 +9,31 @@ const theme = createTheme({
       dark: '#0099cc',
       contrastText: '#0a0e1a',
     },
+    secondary: {
+      main: '#a855f7',
+      light: '#c084fc',
+      dark: '#7c3aed',
+    },
     background: {
-      default: '#0a0e1a',
-      paper: '#141b2d',
+      default: '#030712',
+      paper: '#0a0f1e',
     },
   },
   typography: {
     fontFamily: "'Inter', system-ui, sans-serif",
-    h1: { fontWeight: 800 },
-    h2: { fontWeight: 700 },
-    h3: { fontWeight: 600 },
+    h1: { fontWeight: 900, letterSpacing: '-0.03em' },
+    h2: { fontWeight: 800, letterSpacing: '-0.02em' },
+    h3: { fontWeight: 700 },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '12px',
+          borderRadius: '100px',
           textTransform: 'none',
           fontWeight: 600,
-          padding: '12px 28px',
+          padding: '14px 32px',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
       },
     },
@@ -35,17 +41,19 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: '12px',
-            backgroundColor: 'rgba(20, 27, 45, 0.6)',
+            borderRadius: '16px',
+            backgroundColor: 'rgba(10, 15, 30, 0.8)',
+            backdropFilter: 'blur(20px)',
             '& fieldset': {
-              borderColor: 'rgba(0, 212, 255, 0.2)',
+              borderColor: 'rgba(0, 212, 255, 0.15)',
+              transition: 'all 0.3s ease',
             },
             '&:hover fieldset': {
-              borderColor: 'rgba(0, 212, 255, 0.5)',
+              borderColor: 'rgba(0, 212, 255, 0.4)',
             },
             '&.Mui-focused fieldset': {
               borderColor: '#00d4ff',
-              boxShadow: '0 0 0 2px rgba(0, 212, 255, 0.2)',
+              boxShadow: '0 0 0 3px rgba(0, 212, 255, 0.15)',
             },
           },
         },
@@ -56,13 +64,6 @@ const theme = createTheme({
         root: {
           backgroundImage: 'none',
           backgroundColor: 'transparent',
-        },
-      },
-    },
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          scrollbarColor: 'rgba(0,212,255,0.4) rgba(15,22,41,1)',
         },
       },
     },
