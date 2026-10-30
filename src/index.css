@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background-deep text-text-primary font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    @apply bg-electric/30 text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background-primary;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-electric/40 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-electric/60;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-background-card/60 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-background-card/80 backdrop-blur-2xl border border-white/15;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-electric bg-clip-text text-transparent;
+  }
+
+  .text-gradient-subtle {
+    @apply bg-gradient-to-r from-electric-light to-cyan-light bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .bg-dots {
+    background-image: radial-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+}
