@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://elektrik.vercel.app/sitemap.xml

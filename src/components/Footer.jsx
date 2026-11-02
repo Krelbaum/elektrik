@@ -1,4 +1,6 @@
-import { Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { LogoFull } from './Logo';
+import { ElectricIcon, ShieldIcon, PanelIcon, CircuitIcon, BoltIcon, CableIcon } from './ElectricIcons';
 
 function Footer() {
   const links = [
@@ -9,23 +11,22 @@ function Footer() {
     { label: 'Контакты', href: '#contacts' },
   ];
 
-  return (
-    <footer className="relative bg-[#020408] border-t border-white/[0.04]">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+  const icons = [ElectricIcon, ShieldIcon, PanelIcon, CircuitIcon, BoltIcon, CableIcon];
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  return (
+    <footer className="relative bg-[#020408] border-t border-white/[0.04] overflow-hidden">
+      {/* Neon line */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
+      
+      {/* Background neon accents */}
+      <div className="absolute top-0 left-1/4 w-64 h-64 bg-cyan-500/3 rounded-full blur-[100px]" />
+      <div className="absolute top-0 right-1/4 w-64 h-64 bg-purple-500/3 rounded-full blur-[100px]" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                <Zap size={20} className="text-white" />
-              </div>
-              <div>
-                <div className="font-bold text-lg leading-none">Электрощиты</div>
-                <div className="text-[10px] text-white/30 uppercase tracking-widest">НСК</div>
-              </div>
-            </div>
-            <p className="text-white/25 text-sm leading-relaxed">
+            <LogoFull size="lg" />
+            <p className="text-white/25 text-sm leading-relaxed mt-4">
               Проектирование и изготовление электрощитового оборудования на заказ.
               Работаем с 2014 года. Доставка по всей России.
             </p>
@@ -60,13 +61,25 @@ function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Decorative icons row */}
+        <div className="mt-12 pt-8 border-t border-white/[0.04] flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {icons.map((Icon, i) => (
+              <motion.div
+                key={i}
+                className="w-8 h-8 rounded-lg glass flex items-center justify-center"
+                animate={{
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{ duration: 2 + i * 0.3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Icon size={16} className="text-cyan-400/60" />
+              </motion.div>
+            ))}
+          </div>
           <p className="text-xs text-white/15">
             © {new Date().getFullYear()} Электрощиты НСК. Все права защищены.
           </p>
-          <a href="#" className="text-xs text-white/15 hover:text-cyan-400/50 transition-colors">
-            Политика конфиденциальности
-          </a>
         </div>
       </div>
     </footer>

@@ -1,15 +1,13 @@
-import Header from './components/Header';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import PanelTypes from './components/PanelTypes';
-import Advantages from './components/Advantages';
-import Gallery from './components/Gallery';
-import OrderForm from './components/OrderForm';
-import Contacts from './components/Contacts';
-import Footer from './components/Footer';
-import Preloader from './components/Preloader';
-import ThreeBackground from './components/ThreeBackground';
-import CustomCursor from './components/CustomCursor';
+import Header from '../components/Header';
+import Hero from '../components/Hero';
+import Services from '../components/Services';
+import PanelTypes from '../components/PanelTypes';
+import Advantages from '../components/Advantages';
+import Gallery from '../components/Gallery';
+import OrderForm from '../components/OrderForm';
+import Contacts from '../components/Contacts';
+import Footer from '../components/Footer';
+import Preloader from '../components/Preloader';
 import { useState } from 'react';
 
 function HomePage() {
@@ -17,9 +15,6 @@ function HomePage() {
 
   return (
     <>
-      <CustomCursor />
-      <ThreeBackground />
-
       {loading && <Preloader onComplete={() => setLoading(false)} />}
 
       <div

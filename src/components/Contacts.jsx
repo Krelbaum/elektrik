@@ -59,7 +59,7 @@ function Contacts() {
             className="glass-strong rounded-[24px] overflow-hidden"
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2221!2d82.9!3d55.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDMwJzAwLjAiTiA4MsKwNTQnMDAuMCJF!5e0!3m2!1sru!2sru!4v1"
+              src="https://yandex.ru/map-widget/v1/?ll=82.8896%2C55.0302&z=14&pt=82.8896%2C55.0302%2Cpm2rdm"
               className="w-full h-full min-h-[350px] grayscale hover:grayscale-0 transition-all duration-700"
               style={{ border: 0 }}
               allowFullScreen

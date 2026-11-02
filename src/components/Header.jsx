@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Zap } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { LogoFull } from './Logo';
 import MagneticButton from './MagneticButton';
 
 const navLinks = [
@@ -47,18 +48,8 @@ function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-3 group">
-            <motion.div
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center"
-              whileHover={{ rotate: 10, scale: 1.1 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-            >
-              <Zap size={20} className="text-white" />
-            </motion.div>
-            <div>
-              <div className="font-bold text-lg leading-none">Электрощиты</div>
-              <div className="text-[10px] text-white/40 uppercase tracking-widest">НСК</div>
-            </div>
+          <a href="#" className="group">
+            <LogoFull size="md" />
           </a>
 
           <nav className="hidden md:flex items-center gap-1">
